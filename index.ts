@@ -3,7 +3,6 @@
  * Copyright 2019 Google LLC. All Rights Reserved.
  * SPDX-License-Identifier: Apache-2.0
  */
-
 function initMap(): void {
   const directionsService = new google.maps.DirectionsService();
   const directionsRenderer = new google.maps.DirectionsRenderer();
@@ -14,15 +13,14 @@ function initMap(): void {
       center: { lat: 41.85, lng: -87.65 },
     }
   );
-
   directionsRenderer.setMap(map);
 
-  (document.getElementById("submit") as HTMLElement).addEventListener(
-    "click",
-    () => {
+  let button = document.getElementById("submit") 
+  button!.onclick = 
+    function() {
       calculateAndDisplayRoute(directionsService, directionsRenderer);
     }
-  );
+
 }
 
 function calculateAndDisplayRoute(
@@ -30,41 +28,13 @@ function calculateAndDisplayRoute(
   directionsRenderer: google.maps.DirectionsRenderer
 ) {
   const waypts: google.maps.DirectionsWaypoint[] = [];
+  const wp1 = document.getElementById(
+    "waypoint"
+  ) as HTMLInputElement;
 
-  
-  waypts.push({
-    location: (document.getElementById(
-      "Waypoint 1"
-    ) as HTMLInputElement).value,
-    stopover: true,
-  });
-
-  waypts.push({
-    location: (document.getElementById(
-      "Waypoint 2"
-    ) as HTMLInputElement).value,
-    stopover: true,
-  });
-
-  
-
-// function calculateAndDisplayRoute(
-//   directionsService: google.maps.DirectionsService,
-//   directionsRenderer: google.maps.DirectionsRenderer
-// ) {
-//   const waypts: google.maps.DirectionsWaypoint[] = [];
-//   const checkboxArray = document.getElementById(
-//     "waypoints"
-//   ) as HTMLSelectElement;
-
-//   for (let i = 0; i < checkboxArray.length; i++) {
-//     if (checkboxArray.options[i].selected) {
-//       waypts.push({
-//         location: (checkboxArray[i] as HTMLOptionElement).value,
-//         stopover: true,
-//       });
-//     }
-//   }
+      waypts.push({
+        location: (wp1).value,
+        stopover: true,})
 
   directionsService
     .route({
@@ -72,7 +42,7 @@ function calculateAndDisplayRoute(
       destination: (document.getElementById("end") as HTMLInputElement).value,
       waypoints: waypts,
       optimizeWaypoints: true,
-      travelMode: google.maps.TravelMode.WALKING,
+      travelMode: google.maps.TravelMode.DRIVING,
     })
     .then((response) => {
       directionsRenderer.setDirections(response);
@@ -96,7 +66,7 @@ function calculateAndDisplayRoute(
       }
     })
     .catch((e) => window.alert("Directions request failed due to " + status));
-  }
+}
 
 declare global {
   interface Window {
